@@ -4,7 +4,8 @@ import "net/http"
 
 // GetScores fetches current NFL game scores
 func GetScores() error {
-	URL := "http://static.nfl.com/liveupdate/scorestrip/scorestrip.json"
+	// TODO: make dynamic
+	URL := "https://api.nfl.com/experience/v1/games?season=2021&seasonType=REG&week=10"
 	_, err := http.Get(URL)
 	// TODO:
 	// example response
