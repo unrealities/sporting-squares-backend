@@ -18,4 +18,16 @@ package nflstats
 // 	"visitorPointsTotal": 3
 // }
 type Game struct {
+	Detail struct {
+		Id             string `json:"id"`
+		GameClock      string `json:"gameClock"`
+		HomeScore      string `json:"homePointsTotal"`
+		Period         string `json:"period"`
+		Phase          string `json:"phase"`
+		PossessionTeam struct {
+			Id           string `json:"id"`
+			Abbreviation string `json:"abbreviation"`
+		} `json:"possessionTeam"`
+		VisitorScore string `json:"visitorPointsTotal"`
+	} `json:"detail"`
 }
