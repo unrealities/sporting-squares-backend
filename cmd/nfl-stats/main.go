@@ -2,6 +2,7 @@ package nflstats
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 )
 
@@ -13,5 +14,7 @@ func GetScores() error {
 
 func nflURL(season, week int, seasonType string) string {
 	base := "https://api.nfl.com/experience/v1/games"
-	return fmt.Sprintf("%s?season=%d&seasonType=%s&week=%d", base, season, seasonType, week)
+	url := fmt.Sprintf("%s?season=%d&seasonType=%s&week=%d", base, season, seasonType, week)
+	log.Printf("nflURL: %+v", url)
+	return url
 }
