@@ -1,7 +1,7 @@
 package nflstats
 
 // ESPN NFL Scores
-type espnNFLScores struct {
+type EspnNFLScores struct {
 	Events []struct {
 		Competitions []struct {
 			Attendance int `json:"attendance"`
@@ -237,3 +237,5 @@ type espnNFLScores struct {
 		} `json:"teamsOnBye"`
 	} `json:"week"`
 }
+
+type Scores struct{}

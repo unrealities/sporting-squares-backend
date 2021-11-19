@@ -1,19 +1,34 @@
 package nflstats
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 )
 
 // GetScores fetches current NFL game scores
-func GetScores() error {
+func GetScores() (Scores, error) {
 	URL := espnNFLScoresURL()
 	resp, err := http.Get(URL)
 	if err != nil {
-		return fmt.Errorf("mlbStats#GetSchedule: Get %s, error: %s", URL, err)
+		return Scores{}, fmt.Errorf("nflStats#GetScores: Get %s, error: %s", URL, err)
 	}
+
 	defer resp.Body.Close()
-	return err
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return Scores{}, fmt.Errorf("nflStats#GetScores: reading Get response body error: %s", err)
+	}
+
+	espnNFLScoresResp := Scores{}
+	err = json.Unmarshal(body, &espnNFLScoresResp)
+	if err != nil {
+		return Scores{}, fmt.Errorf("nflStats#GetScores: unmarshal error: %s", err)
+	}
+
+	return espnNFLScoresResp, nil
 }
 
 // TODO: switch to ESPN:
