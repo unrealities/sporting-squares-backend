@@ -22,6 +22,7 @@ func GetScores() (Scores, error) {
 		return Scores{}, fmt.Errorf("nflStats#GetScores: reading Get response body error: %s", err)
 	}
 
+	// TODO: remove the unnecessary fields from the ESPN response
 	espnNFLScoresResp := Scores{}
 	err = json.Unmarshal(body, &espnNFLScoresResp)
 	if err != nil {
