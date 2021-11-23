@@ -7,6 +7,11 @@ import (
 	"net/http"
 )
 
+// TODO: reduce GetESPNScores struct to app readable data
+func GetScores() (Scores, error) {
+	return Scores{}, nil
+}
+
 // GetESPNScores fetches current NFL game scores
 func GetESPNScores() (EspnNFLScores, error) {
 	URL := "http://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard"
