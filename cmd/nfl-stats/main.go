@@ -7,21 +7,14 @@ import (
 	"net/http"
 )
 
-// TODO: This is unnecessary, just for validating API
-func main() {
-	resp, err := GetESPNScores()
-	if err != nil {
-		fmt.Println(fmt.Errorf("main: GetESPNScores, error: %s", err))
-	}
-	fmt.Printf("main: GetESPNScores, resp: %+v", resp)
-}
-
 // TODO: reduce GetESPNScores struct to app readable data
 func GetScores() (Scores, error) {
-	_, err := GetESPNScores()
+	resp, err := GetESPNScores()
 	if err != nil {
 		return Scores{}, fmt.Errorf("nflStats@GetScores: GetESPNScores, error: %s", err)
 	}
+	fmt.Printf("main: GetESPNScores, resp: %+v", resp)
+
 	return Scores{}, nil
 }
 
