@@ -13,7 +13,7 @@ type EspnNFLScores struct {
 				HomeAway   string `json:"homeAway"`
 				ID         string `json:"id"`
 				Linescores []struct {
-					Value int `json:"value"`
+					Value float32 `json:"value"`
 				} `json:"linescores"`
 				Order   int `json:"order"`
 				Records []struct {
@@ -101,7 +101,7 @@ type EspnNFLScores struct {
 					Team         struct {
 						ID string `json:"id"`
 					} `json:"team"`
-					Value int `json:"value"`
+					Value float32 `json:"value"`
 				} `json:"leaders"`
 				Name             string `json:"name"`
 				ShortDisplayName string `json:"shortDisplayName"`
@@ -111,9 +111,9 @@ type EspnNFLScores struct {
 			Recent      bool          `json:"recent"`
 			StartDate   string        `json:"startDate"`
 			Status      struct {
-				Clock        int    `json:"clock"`
-				DisplayClock string `json:"displayClock"`
-				Period       int    `json:"period"`
+				Clock        float32 `json:"clock"`
+				DisplayClock string  `json:"displayClock"`
+				Period       int     `json:"period"`
 				Type         struct {
 					Completed   bool   `json:"completed"`
 					Description string `json:"description"`
@@ -160,9 +160,9 @@ type EspnNFLScores struct {
 		} `json:"season"`
 		ShortName string `json:"shortName"`
 		Status    struct {
-			Clock        int    `json:"clock"`
-			DisplayClock string `json:"displayClock"`
-			Period       int    `json:"period"`
+			Clock        float32 `json:"clock"`
+			DisplayClock string  `json:"displayClock"`
+			Period       int     `json:"period"`
 			Type         struct {
 				Completed   bool   `json:"completed"`
 				Description string `json:"description"`

@@ -19,8 +19,6 @@ func GetScores() (Scores, error) {
 }
 
 // GetESPNScores fetches current NFL game scores
-// TODO:
-// nflStats@GetScores: GetESPNScores, error: nflStats#GetESPNScores: unmarshal error: json: cannot unmarshal number 7.0 into Go struct field .events.competitions.competitors.linescores.value of type int
 func GetESPNScores() (EspnNFLScores, error) {
 	URL := "http://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard"
 	resp, err := http.Get(URL)
