@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"reflect"
 )
 
 // TODO: reduce GetESPNScores struct to app readable data
@@ -13,7 +14,17 @@ func GetScores() (Scores, error) {
 	if err != nil {
 		return Scores{}, fmt.Errorf("nflStats@GetScores: GetESPNScores, error: %s", err)
 	}
+
+	// Looking at fields in response
 	fmt.Printf("main: GetESPNScores, resp: %+v", resp)
+	// TODO: No Leagues
+	fmt.Printf("resp.Leagues[0]: %+v", resp.Leagues[0])
+	v := reflect.ValueOf(resp)
+	typeOfS := v.Type()
+
+	for i := 0; i < v.NumField(); i++ {
+		fmt.Printf("Field: %s\tValue: %v\n", typeOfS.Field(i).Name, v.Field(i).Interface())
+	}
 
 	return Scores{}, nil
 }
