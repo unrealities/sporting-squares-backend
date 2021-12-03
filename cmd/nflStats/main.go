@@ -3,7 +3,6 @@ package nflStats
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"reflect"
 )
@@ -18,7 +17,6 @@ func GetScores() (Scores, error) {
 	// Looking at fields in response
 	fmt.Printf("main: GetESPNScores, resp: %+v", resp)
 	// TODO: No Leagues
-	fmt.Printf("resp.Leagues[0]: %+v", resp.Leagues[0])
 	v := reflect.ValueOf(resp)
 	typeOfS := v.Type()
 
@@ -39,15 +37,10 @@ func GetESPNScores() (EspnNFLScores, error) {
 
 	defer resp.Body.Close()
 
-	body, err := ioutil.ReadAll(resp.Body)
+	espnNFLScoresResp := EspnNFLScores{}
+	json.NewDecoder(resp.Body).Decode(espnNFLScoresResp)
 	if err != nil {
 		return EspnNFLScores{}, fmt.Errorf("nflStats#GetESPNScores: reading Get response body error: %s", err)
-	}
-
-	espnNFLScoresResp := EspnNFLScores{}
-	err = json.Unmarshal(body, &espnNFLScoresResp)
-	if err != nil {
-		return EspnNFLScores{}, fmt.Errorf("nflStats#GetESPNScores: unmarshal error: %s", err)
 	}
 
 	return EspnNFLScores{}, nil
