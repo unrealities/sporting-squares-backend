@@ -3,25 +3,15 @@ package nflStats
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
-	"reflect"
 )
 
 // TODO: reduce GetESPNScores struct to app readable data
 func GetScores() (Scores, error) {
-	resp, err := GetESPNScores()
+	_, err := GetESPNScores()
 	if err != nil {
 		return Scores{}, fmt.Errorf("nflStats@GetScores: GetESPNScores, error: %s", err)
-	}
-
-	// Looking at fields in response
-	fmt.Printf("main: GetESPNScores, resp: %+v", resp)
-	// TODO: No Leagues
-	v := reflect.ValueOf(resp)
-	typeOfS := v.Type()
-
-	for i := 0; i < v.NumField(); i++ {
-		fmt.Printf("Field: %s\tValue: %v\n", typeOfS.Field(i).Name, v.Field(i).Interface())
 	}
 
 	return Scores{}, nil
@@ -36,6 +26,12 @@ func GetESPNScores() (EspnNFLScores, error) {
 	}
 
 	defer resp.Body.Close()
+
+	// Looking at fields in response
+	fmt.Printf("GetESPNScores resp.Body: %+v", resp.Body)
+	// TODO: No Leagues
+	body, err := io.ReadAll(resp.Body)
+	fmt.Println(string(body))
 
 	espnNFLScoresResp := EspnNFLScores{}
 	json.NewDecoder(resp.Body).Decode(espnNFLScoresResp)
