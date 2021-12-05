@@ -9,7 +9,9 @@ import (
 
 // TODO: reduce GetESPNScores struct to app readable data
 func GetScores() (Scores, error) {
-	_, err := GetESPNScores()
+	resp, err := GetESPNScores()
+	fmt.Printf("resp: %+v", resp)
+	fmt.Printf("err: %+v", err)
 	if err != nil {
 		return Scores{}, fmt.Errorf("nflStats@GetScores: GetESPNScores, error: %s", err)
 	}
@@ -27,17 +29,13 @@ func GetESPNScores() (EspnNFLScores, error) {
 
 	defer resp.Body.Close()
 
-	// Looking at fields in response
-	fmt.Printf("GetESPNScores resp.Body: %+v", resp.Body)
-	// TODO: No Leagues
 	body, err := io.ReadAll(resp.Body)
-	fmt.Println(string(body))
 
 	espnNFLScoresResp := EspnNFLScores{}
-	json.NewDecoder(resp.Body).Decode(espnNFLScoresResp)
+	json.Unmarshal([]byte(body), &espnNFLScoresResp)
 	if err != nil {
 		return EspnNFLScores{}, fmt.Errorf("nflStats#GetESPNScores: reading Get response body error: %s", err)
 	}
 
-	return EspnNFLScores{}, nil
+	return espnNFLScoresResp, nil
 }

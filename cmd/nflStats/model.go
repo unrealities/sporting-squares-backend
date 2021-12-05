@@ -273,7 +273,7 @@ type EspnNFLScores struct {
 				IsExternal bool     `json:"isExternal"`
 				IsPremium  bool     `json:"isPremium"`
 			} `json:"link"`
-		} `json:"weather"`
+		} `json:"weather,omitempty"`
 		Status struct {
 			Clock        float64 `json:"clock"`
 			DisplayClock string  `json:"displayClock"`
