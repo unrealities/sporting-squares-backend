@@ -10,8 +10,12 @@ import (
 // TODO: reduce GetESPNScores struct to app readable data
 func GetScores() (Scores, error) {
 	resp, err := GetESPNScores()
-	fmt.Printf("resp: %+v", resp.Events)
-	fmt.Printf("err: %+v", err)
+	for _, e := range resp.Events {
+		fmt.Printf("Name: %+v \n", e.ShortName)
+		for _, c := range e.Competitions {
+			fmt.Printf("ID: %+v \n", c.ID)
+		}
+	}
 	if err != nil {
 		return Scores{}, fmt.Errorf("nflStats@GetScores: GetESPNScores, error: %s", err)
 	}
