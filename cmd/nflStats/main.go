@@ -11,9 +11,12 @@ import (
 func GetScores() (Scores, error) {
 	resp, err := GetESPNScores()
 	for _, e := range resp.Events {
-		fmt.Printf("Name: %+v \n", e.ShortName)
 		for _, c := range e.Competitions {
-			fmt.Printf("ID: %+v \n", c.ID)
+			if e.ID == c.ID {
+				for _, t := range c.Competitors {
+					fmt.Printf("HomeAway: %+v Name: %+v Score: %+v", t.HomeAway, t.Team.Name, t.Score)
+				}
+			}
 		}
 	}
 	if err != nil {
