@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	scores, err := nflStats.GetScores()
-	fmt.Println(scores)
+	games, err := nflStats.GetGames()
+	fmt.Println(games)
 	fmt.Println(err)
 }

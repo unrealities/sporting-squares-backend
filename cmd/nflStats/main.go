@@ -5,25 +5,42 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strconv"
 )
 
 // TODO: reduce GetESPNScores struct to app readable data
-func GetScores() (Scores, error) {
+func GetGames() ([]Game, error) {
+	games := []Game{}
 	resp, err := GetESPNScores()
-	for _, e := range resp.Events {
-		for _, c := range e.Competitions {
-			if e.ID == c.ID {
-				for _, t := range c.Competitors {
-					fmt.Printf("HomeAway: %+v Name: %+v Score: %+v", t.HomeAway, t.Team.Name, t.Score)
-				}
-			}
-		}
-	}
 	if err != nil {
-		return Scores{}, fmt.Errorf("nflStats@GetScores: GetESPNScores, error: %s", err)
+		return games, fmt.Errorf("nflStats@GetScores: GetESPNScores, error: %s", err)
 	}
 
-	return Scores{}, nil
+	for _, e := range resp.Events {
+		for _, c := range e.Competitions {
+			g := Game{}
+			g.Quarter = c.Status.Period
+			g.Time = c.Status.Clock
+			if e.ID == c.ID {
+				for _, t := range c.Competitors {
+					score, err := strconv.Atoi(t.Score)
+					if err != nil {
+						score = -1
+					}
+					if t.HomeAway == "home" {
+						g.HomeTeam = t.Team.Name
+						g.HomeScore = score
+					} else {
+						g.AwayTeam = t.Team.Name
+						g.AwayScore = score
+					}
+				}
+			}
+			games = append(games, g)
+		}
+	}
+
+	return games, nil
 }
 
 // GetESPNScores fetches current NFL game scores

@@ -291,4 +291,11 @@ type EspnNFLScores struct {
 	} `json:"events"`
 }
 
-type Scores struct{}
+type Game struct {
+	AwayScore int     `json: "awayScore"`
+	AwayTeam  string  `json: "awayTeam"`
+	HomeScore int     `json: "homeScore"`
+	HomeTeam  string  `json: "homeTeam"`
+	Quarter   int     `json: "quarter"`
+	Time      float64 `json: "time"`
+}
