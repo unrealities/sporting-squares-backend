@@ -21,6 +21,10 @@ func GetGames() ([]Game, error) {
 			g := Game{}
 			g.Quarter = c.Status.Period
 			g.Time = c.Status.Clock
+			if len(c.Odds) > 0 {
+				g.Odds.Details = c.Odds[0].Details
+				g.Odds.OverUnder = c.Odds[0].OverUnder
+			}
 			if e.ID == c.ID {
 				for _, t := range c.Competitors {
 					score, err := strconv.Atoi(t.Score)
