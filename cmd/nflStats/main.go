@@ -19,11 +19,11 @@ func GetGames() ([]Game, error) {
 	for _, e := range resp.Events {
 		for _, c := range e.Competitions {
 			g := Game{}
-			g.Quarter = c.Status.Period
-			g.Time = c.Status.Clock
+			g.Quarter = c.Status.Period // 0 = Game has not started. 4 = 4th or Game Over
+			g.Time = c.Status.Clock // 0 = Game is over or has not started
 			if len(c.Odds) > 0 {
-				g.Odds.Details = c.Odds[0].Details
-				g.Odds.OverUnder = c.Odds[0].OverUnder
+				g.Odds.Details = c.Odds[0].Details // ex. ARI -2.5 (need to separate out team and spread)
+				g.Odds.OverUnder = c.Odds[0].OverUnder // ex. 51.5
 			}
 			if e.ID == c.ID {
 				for _, t := range c.Competitors {
@@ -32,10 +32,10 @@ func GetGames() ([]Game, error) {
 						score = -1
 					}
 					if t.HomeAway == "home" {
-						g.HomeTeam = t.Team.Name
+						g.HomeTeam = t.Team.Abbreviation
 						g.HomeScore = score
 					} else {
-						g.AwayTeam = t.Team.Name
+						g.AwayTeam = t.Team.Abbreviation
 						g.AwayScore = score
 					}
 				}
