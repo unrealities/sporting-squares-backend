@@ -7,7 +7,9 @@ import (
 )
 
 func main() {
-	games, err := nflStats.GetGames()
-	fmt.Println(games)
-	fmt.Println(err)
+	games, _ := nflStats.GetGames()
+	for i, g := range games {
+		fmt.Printf("Game %v: %s (%v) @ %s (%v) [%v][%v] {%v [%v]}\n",
+			i, g.AwayTeam, g.AwayScore, g.HomeTeam, g.HomeScore, g.Quarter, g.Time, g.Odds.Details, g.Odds.OverUnder)
+	}
 }
