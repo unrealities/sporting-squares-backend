@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-// TODO: reduce GetESPNScores struct to app readable data
+// TODO: persist to firebase cache storage
 func GetGames() ([]Game, error) {
 	games := []Game{}
 	resp, err := GetESPNScores()
@@ -17,12 +17,13 @@ func GetGames() ([]Game, error) {
 	}
 
 	for _, e := range resp.Events {
+		// Tuesday after week the scores are still previous week
 		for _, c := range e.Competitions {
 			g := Game{}
-			g.Quarter = c.Status.Period // 0 = Game has not started. 4 = 4th or Game Over
-			g.Time = c.Status.Clock // 0 = Game is over or has not started
+			g.Quarter = c.Status.Period // 0 = Game has not started. 4 = 4th or Game Over. 5 = Overtime or Game Over
+			g.Time = c.Status.Clock     // 0 = Game is over or has not started
 			if len(c.Odds) > 0 {
-				g.Odds.Details = c.Odds[0].Details // ex. ARI -2.5 (need to separate out team and spread)
+				g.Odds.Details = c.Odds[0].Details     // ex. ARI -2.5 (need to separate out team and spread)
 				g.Odds.OverUnder = c.Odds[0].OverUnder // ex. 51.5
 			}
 			if e.ID == c.ID {
