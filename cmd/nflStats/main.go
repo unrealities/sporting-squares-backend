@@ -18,6 +18,7 @@ func GetGames() ([]Game, error) {
 
 	for _, e := range resp.Events {
 		// Tuesday after week the scores are still previous week
+		// Wednesday new games are ready
 		for _, c := range e.Competitions {
 			g := Game{}
 			g.Quarter = c.Status.Period // 0 = Game has not started. 4 = 4th or Game Over. 5 = Overtime or Game Over

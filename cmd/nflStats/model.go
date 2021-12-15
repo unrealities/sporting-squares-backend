@@ -302,4 +302,14 @@ type Game struct {
 		Details   string
 		OverUnder float64
 	}
+	Digits struct {
+		Away1 int
+		Away2 int
+		Away3 int
+		Away4 int
+		Home1 int
+		Home2 int
+		Home3 int
+		Home4 int
+	}
 }
