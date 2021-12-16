@@ -17,16 +17,19 @@ func GetGames() ([]Game, error) {
 	}
 
 	for _, e := range resp.Events {
+		g := Game{}
 		// Tuesday after week the scores are still previous week
 		// Wednesday new games are ready
+		g.Quarter = e.Status.Period    // 0 = Game has not started. 4 = 4th or Game Over. 5 = Overtime or Game Over
+		g.Time = e.Status.DisplayClock // 0 = Game has not started. 4 = 4th or Game Over. 5 = Overtime or Game Over
+		g.GameOver = e.Status.Type.Completed
 		for _, c := range e.Competitions {
-			g := Game{}
-			g.Quarter = c.Status.Period // 0 = Game has not started. 4 = 4th or Game Over. 5 = Overtime or Game Over
-			g.Time = c.Status.Clock     // 0 = Game is over or has not started
 			if len(c.Odds) > 0 {
 				g.Odds.Details = c.Odds[0].Details     // ex. ARI -2.5 (need to separate out team and spread)
 				g.Odds.OverUnder = c.Odds[0].OverUnder // ex. 51.5
 			}
+			// This can get the current score, but we would need to persist the score at the end of each quarter
+			// To get last digit NUM % 10
 			if e.ID == c.ID {
 				for _, t := range c.Competitors {
 					score, err := strconv.Atoi(t.Score)

@@ -297,7 +297,8 @@ type Game struct {
 	HomeScore int
 	HomeTeam  string
 	Quarter   int
-	Time      float64
+	Time      string
+	GameOver  bool
 	Odds      struct {
 		Details   string
 		OverUnder float64
