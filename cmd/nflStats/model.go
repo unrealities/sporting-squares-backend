@@ -292,6 +292,7 @@ type EspnNFLScores struct {
 }
 
 type Game struct {
+	ID        int
 	AwayScore int
 	AwayTeam  string
 	HomeScore int

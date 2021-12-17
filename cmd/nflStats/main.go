@@ -20,6 +20,11 @@ func GetGames() ([]Game, error) {
 		g := Game{}
 		// Tuesday after week the scores are still previous week
 		// Wednesday new games are ready
+		id, err := strconv.Atoi(e.ID)
+		if err != nil {
+			id = -1
+		}
+		g.ID = id                      // May be able to use ID to fetch individual box scores
 		g.Quarter = e.Status.Period    // 0 = Game has not started. 4 = 4th or Game Over. 5 = Overtime or Game Over
 		g.Time = e.Status.DisplayClock // 0 = Game has not started. 4 = 4th or Game Over. 5 = Overtime or Game Over
 		g.GameOver = e.Status.Type.Completed
