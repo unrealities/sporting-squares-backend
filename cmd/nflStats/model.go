@@ -291,6 +291,8 @@ type EspnNFLScores struct {
 	} `json:"events"`
 }
 
+type EspnNFLGame struct {
+}
 type Game struct {
 	ID        int
 	AwayScore int

@@ -77,3 +77,14 @@ func GetESPNScores() (EspnNFLScores, error) {
 
 	return espnNFLScoresResp, nil
 }
+
+// GetESPNGame fetches and individual NFL game given a gameIdea
+func GetESPNGame(gameID string) (EspnNFLGame, error) {
+	URL := "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=" + gameID
+	_, err := http.Get(URL)
+	if err != nil {
+		return EspnNFLGame{}, fmt.Errorf("nflStats#GetESPNScores: Get %s, error: %s", URL, err)
+	}
+
+	return EspnNFLGame{}, nil
+}
