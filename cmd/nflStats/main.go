@@ -81,10 +81,20 @@ func GetESPNScores() (EspnNFLScores, error) {
 // GetESPNGame fetches and individual NFL game given a gameIdea
 func GetESPNGame(gameID string) (EspnNFLGame, error) {
 	URL := "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=" + gameID
-	_, err := http.Get(URL)
+	resp, err := http.Get(URL)
 	if err != nil {
-		return EspnNFLGame{}, fmt.Errorf("nflStats#GetESPNScores: Get %s, error: %s", URL, err)
+		return EspnNFLGame{}, fmt.Errorf("nflStats#GetESPNGame: Get %s, error: %s", URL, err)
 	}
 
-	return EspnNFLGame{}, nil
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+
+	espnNFLGameResp := EspnNFLGame{}
+	json.Unmarshal([]byte(body), &espnNFLGameResp)
+	if err != nil {
+		return EspnNFLGame{}, fmt.Errorf("nflStats#GetESPNGame: reading Get response body error: %s", err)
+	}
+
+	return espnNFLGameResp, nil
 }
