@@ -1267,6 +1267,7 @@ type Game struct {
 	AwayTeam  string
 	HomeScore int
 	HomeTeam  string
+	Linescore string
 	Quarter   int
 	Time      string
 	GameOver  bool

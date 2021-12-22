@@ -22,8 +22,15 @@ func GetGames() ([]Game, error) {
 		// Wednesday new games are ready
 		id, err := strconv.Atoi(e.ID)
 		if err != nil {
-			id = -1
+			g.ID = -1
+			continue
 		}
+		score, err := GetESPNGame(id)
+		if err != nil {
+			g.Quarter = -1
+			continue
+		}
+		g.Linescore = score.Header.Competitions[0].Competitors[0].Linescores[0].DisplayValue
 		g.ID = id                      // May be able to use ID to fetch individual box scores
 		g.Quarter = e.Status.Period    // 0 = Game has not started. 4 = 4th or Game Over. 5 = Overtime or Game Over
 		g.Time = e.Status.DisplayClock // 0 = Game has not started. 4 = 4th or Game Over. 5 = Overtime or Game Over
@@ -79,8 +86,8 @@ func GetESPNScores() (EspnNFLScores, error) {
 }
 
 // GetESPNGame fetches and individual NFL game given a gameIdea
-func GetESPNGame(gameID string) (EspnNFLGame, error) {
-	URL := "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=" + gameID
+func GetESPNGame(gameID int) (EspnNFLGame, error) {
+	URL := "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=" + strconv.Itoa(gameID)
 	resp, err := http.Get(URL)
 	if err != nil {
 		return EspnNFLGame{}, fmt.Errorf("nflStats#GetESPNGame: Get %s, error: %s", URL, err)
