@@ -30,7 +30,30 @@ func GetGames() ([]Game, error) {
 			g.Quarter = -1
 			continue
 		}
-		g.Linescore = score.Header.Competitions[0].Competitors[0].Linescores[0].DisplayValue
+		// example Linescores (each team has one)
+		// "linescores":[{"displayValue":"0"},{"displayValue":"14"},{"displayValue":"0"},{"displayValue":"14"},{"displayValue":"0"}]
+		// 0 = first quarter, 1 = second quarter, 2 = third quarter, 3 = fourth quarter, 4 = overtime
+		for _, c := range score.Header.Competitions {
+			if e.ID == c.ID {
+				for _, t := range c.Competitors {
+					score, err := strconv.Atoi(t.Score)
+					if err != nil {
+						score = -1
+					}
+					// To get last digit NUM % 10
+					if t.HomeAway == "home" {
+						g.HomeTeam = t.Team.Abbreviation
+						g.HomeScore = score
+						// TODO: use line score to determine score after each period
+						// g.Digits... score.Header.Competitions[0].Competitors[0].Linescores[0].DisplayValue
+					} else {
+						g.AwayTeam = t.Team.Abbreviation
+						g.AwayScore = score
+						// TODO: use line score to determine score after each period
+					}
+				}
+			}
+		}
 		g.ID = id                      // May be able to use ID to fetch individual box scores
 		g.Quarter = e.Status.Period    // 0 = Game has not started. 4 = 4th or Game Over. 5 = Overtime or Game Over
 		g.Time = e.Status.DisplayClock // 0 = Game has not started. 4 = 4th or Game Over. 5 = Overtime or Game Over
@@ -39,23 +62,6 @@ func GetGames() ([]Game, error) {
 			if len(c.Odds) > 0 {
 				g.Odds.Details = c.Odds[0].Details     // ex. ARI -2.5 (need to separate out team and spread)
 				g.Odds.OverUnder = c.Odds[0].OverUnder // ex. 51.5
-			}
-			// This can get the current score, but we would need to persist the score at the end of each quarter
-			// To get last digit NUM % 10
-			if e.ID == c.ID {
-				for _, t := range c.Competitors {
-					score, err := strconv.Atoi(t.Score)
-					if err != nil {
-						score = -1
-					}
-					if t.HomeAway == "home" {
-						g.HomeTeam = t.Team.Abbreviation
-						g.HomeScore = score
-					} else {
-						g.AwayTeam = t.Team.Abbreviation
-						g.AwayScore = score
-					}
-				}
 			}
 			games = append(games, g)
 		}
