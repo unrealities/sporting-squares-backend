@@ -30,9 +30,7 @@ func GetGames() ([]Game, error) {
 			g.Quarter = -1
 			continue
 		}
-		// example Linescores (each team has one)
-		// "linescores":[{"displayValue":"0"},{"displayValue":"14"},{"displayValue":"0"},{"displayValue":"14"},{"displayValue":"0"}]
-		// 0 = first quarter, 1 = second quarter, 2 = third quarter, 3 = fourth quarter, 4 = overtime
+
 		for _, c := range score.Header.Competitions {
 			if e.ID == c.ID {
 				for _, t := range c.Competitors {
@@ -44,12 +42,71 @@ func GetGames() ([]Game, error) {
 					if t.HomeAway == "home" {
 						g.HomeTeam = t.Team.Abbreviation
 						g.HomeScore = score
-						// TODO: use line score to determine score after each period
-						// g.Digits... score.Header.Competitions[0].Competitors[0].Linescores[0].DisplayValue
+
+						// TODO: This is verbose and duplicated
+						firstQ, err := strconv.Atoi(t.Linescores[0].DisplayValue)
+						if err != nil {
+							g.Digits.Home1 = -1
+						} else {
+							g.Digits.Home1 = firstQ % 10
+						}
+						secondQ, err := strconv.Atoi(t.Linescores[1].DisplayValue)
+						if err != nil {
+							g.Digits.Home2 = -1
+						} else {
+							g.Digits.Home2 = (firstQ + secondQ) % 10
+						}
+						thirdQ, err := strconv.Atoi(t.Linescores[2].DisplayValue)
+						if err != nil {
+							g.Digits.Home3 = -1
+						} else {
+							g.Digits.Home3 = (firstQ + secondQ + thirdQ) % 10
+						}
+						fourthQ, err := strconv.Atoi(t.Linescores[3].DisplayValue)
+						if err != nil {
+							g.Digits.Home4 = -1
+						} else {
+							// TODO: index out of range. I assume the array is only length four if there is no overtime or the game hasn't started
+							overtime, err := strconv.Atoi(t.Linescores[4].DisplayValue)
+							if err != nil {
+								g.Digits.Home4 = -1
+							} else {
+								g.Digits.Home4 = (firstQ + secondQ + thirdQ + fourthQ + overtime) % 10
+							}
+						}
 					} else {
 						g.AwayTeam = t.Team.Abbreviation
 						g.AwayScore = score
-						// TODO: use line score to determine score after each period
+
+						firstQ, err := strconv.Atoi(t.Linescores[0].DisplayValue)
+						if err != nil {
+							g.Digits.Away1 = -1
+						} else {
+							g.Digits.Away1 = firstQ % 10
+						}
+						secondQ, err := strconv.Atoi(t.Linescores[1].DisplayValue)
+						if err != nil {
+							g.Digits.Away2 = -1
+						} else {
+							g.Digits.Away2 = (firstQ + secondQ) % 10
+						}
+						thirdQ, err := strconv.Atoi(t.Linescores[2].DisplayValue)
+						if err != nil {
+							g.Digits.Away3 = -1
+						} else {
+							g.Digits.Away3 = (firstQ + secondQ + thirdQ) % 10
+						}
+						fourthQ, err := strconv.Atoi(t.Linescores[3].DisplayValue)
+						if err != nil {
+							g.Digits.Away4 = -1
+						} else {
+							overtime, err := strconv.Atoi(t.Linescores[4].DisplayValue)
+							if err != nil {
+								g.Digits.Away4 = -1
+							} else {
+								g.Digits.Away4 = (firstQ + secondQ + thirdQ + fourthQ + overtime) % 10
+							}
+						}
 					}
 				}
 			}
