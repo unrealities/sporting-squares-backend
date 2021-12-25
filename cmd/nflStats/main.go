@@ -43,6 +43,14 @@ func GetGames() ([]Game, error) {
 						g.HomeTeam = t.Team.Abbreviation
 						g.HomeScore = score
 
+						if len(t.Linescores) == 0 {
+							g.Digits.Home1 = -1
+							g.Digits.Home2 = -1
+							g.Digits.Home3 = -1
+							g.Digits.Home4 = -1
+							continue
+						}
+
 						// TODO: This is verbose and duplicated
 						firstQ, err := strconv.Atoi(t.Linescores[0].DisplayValue)
 						if err != nil {
@@ -66,17 +74,27 @@ func GetGames() ([]Game, error) {
 						if err != nil {
 							g.Digits.Home4 = -1
 						} else {
-							// TODO: index out of range. I assume the array is only length four if there is no overtime or the game hasn't started
-							overtime, err := strconv.Atoi(t.Linescores[4].DisplayValue)
-							if err != nil {
-								g.Digits.Home4 = -1
-							} else {
-								g.Digits.Home4 = (firstQ + secondQ + thirdQ + fourthQ + overtime) % 10
+							g.Digits.Home4 = (firstQ + secondQ + thirdQ + fourthQ) % 10
+							if len(t.Linescores) > 4 {
+								overtime, err := strconv.Atoi(t.Linescores[4].DisplayValue)
+								if err != nil {
+									g.Digits.Home4 = -1
+								} else {
+									g.Digits.Home4 = (firstQ + secondQ + thirdQ + fourthQ + overtime) % 10
+								}
 							}
 						}
 					} else {
 						g.AwayTeam = t.Team.Abbreviation
 						g.AwayScore = score
+
+						if len(t.Linescores) == 0 {
+							g.Digits.Away1 = -1
+							g.Digits.Away2 = -1
+							g.Digits.Away3 = -1
+							g.Digits.Away4 = -1
+							continue
+						}
 
 						firstQ, err := strconv.Atoi(t.Linescores[0].DisplayValue)
 						if err != nil {
@@ -100,11 +118,14 @@ func GetGames() ([]Game, error) {
 						if err != nil {
 							g.Digits.Away4 = -1
 						} else {
-							overtime, err := strconv.Atoi(t.Linescores[4].DisplayValue)
-							if err != nil {
-								g.Digits.Away4 = -1
-							} else {
-								g.Digits.Away4 = (firstQ + secondQ + thirdQ + fourthQ + overtime) % 10
+							g.Digits.Away4 = (firstQ + secondQ + thirdQ + fourthQ) % 10
+							if len(t.Linescores) > 4 {
+								overtime, err := strconv.Atoi(t.Linescores[4].DisplayValue)
+								if err != nil {
+									g.Digits.Away4 = -1
+								} else {
+									g.Digits.Away4 = (firstQ + secondQ + thirdQ + fourthQ + overtime) % 10
+								}
 							}
 						}
 					}
