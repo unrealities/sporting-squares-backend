@@ -50,13 +50,18 @@ func GetGames() ([]Game, error) {
 							g.Digits.Home4 = -1
 							continue
 						}
-
 						// TODO: This is verbose and duplicated
 						firstQ, err := strconv.Atoi(t.Linescores[0].DisplayValue)
 						if err != nil {
 							g.Digits.Home1 = -1
 						} else {
 							g.Digits.Home1 = firstQ % 10
+						}
+						if len(t.Linescores) == 1 {
+							g.Digits.Home2 = -1
+							g.Digits.Home3 = -1
+							g.Digits.Home4 = -1
+							continue
 						}
 						secondQ, err := strconv.Atoi(t.Linescores[1].DisplayValue)
 						if err != nil {
@@ -95,12 +100,17 @@ func GetGames() ([]Game, error) {
 							g.Digits.Away4 = -1
 							continue
 						}
-
 						firstQ, err := strconv.Atoi(t.Linescores[0].DisplayValue)
 						if err != nil {
 							g.Digits.Away1 = -1
 						} else {
 							g.Digits.Away1 = firstQ % 10
+						}
+						if len(t.Linescores) == 1 {
+							g.Digits.Away2 = -1
+							g.Digits.Away3 = -1
+							g.Digits.Away4 = -1
+							continue
 						}
 						secondQ, err := strconv.Atoi(t.Linescores[1].DisplayValue)
 						if err != nil {
