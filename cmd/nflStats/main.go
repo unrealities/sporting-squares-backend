@@ -69,11 +69,20 @@ func GetGames() ([]Game, error) {
 						} else {
 							g.Digits.Home2 = (firstQ + secondQ) % 10
 						}
+						if len(t.Linescores) == 2 {
+							g.Digits.Home3 = -1
+							g.Digits.Home4 = -1
+							continue
+						}
 						thirdQ, err := strconv.Atoi(t.Linescores[2].DisplayValue)
 						if err != nil {
 							g.Digits.Home3 = -1
 						} else {
 							g.Digits.Home3 = (firstQ + secondQ + thirdQ) % 10
+						}
+						if len(t.Linescores) == 3 {
+							g.Digits.Home4 = -1
+							continue
 						}
 						fourthQ, err := strconv.Atoi(t.Linescores[3].DisplayValue)
 						if err != nil {
@@ -118,11 +127,20 @@ func GetGames() ([]Game, error) {
 						} else {
 							g.Digits.Away2 = (firstQ + secondQ) % 10
 						}
+						if len(t.Linescores) == 2 {
+							g.Digits.Away3 = -1
+							g.Digits.Away4 = -1
+							continue
+						}
 						thirdQ, err := strconv.Atoi(t.Linescores[2].DisplayValue)
 						if err != nil {
 							g.Digits.Away3 = -1
 						} else {
 							g.Digits.Away3 = (firstQ + secondQ + thirdQ) % 10
+						}
+						if len(t.Linescores) == 3 {
+							g.Digits.Away4 = -1
+							continue
 						}
 						fourthQ, err := strconv.Atoi(t.Linescores[3].DisplayValue)
 						if err != nil {
