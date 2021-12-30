@@ -177,10 +177,6 @@ func GetGames() ([]Game, error) {
 }
 
 // GetESPNScores fetches current NFL game scores
-// TODO: This can get the games for a given week: http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2021/types/2/weeks/17/events?lang=en&region=us
-/*
-{"$meta":{"parameters":{"week":["17"],"season":["2021"],"seasontypes":["2"]}},"count":16,"pageIndex":1,"pageSize":25,"pageCount":1,"items":[{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326569?lang=en&region=us"},{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326570?lang=en&region=us"},{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326571?lang=en&region=us"},{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326577?lang=en&region=us"},{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326573?lang=en&region=us"},{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326574?lang=en&region=us"},{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326576?lang=en&region=us"},{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326578?lang=en&region=us"},{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326581?lang=en&region=us"},{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326579?lang=en&region=us"},{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326580?lang=en&region=us"},{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326572?lang=en&region=us"},{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326575?lang=en&region=us"},{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326582?lang=en&region=us"},{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326583?lang=en&region=us"},{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326584?lang=en&region=us"}]}
-*/
 func GetESPNScores() (EspnNFLScores, error) {
 	URL := "http://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard"
 	resp, err := http.Get(URL)
@@ -220,4 +216,20 @@ func GetESPNGame(gameID int) (EspnNFLGame, error) {
 	}
 
 	return espnNFLGameResp, nil
+}
+
+// TODO: This can get the games for a given week: http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2021/types/2/weeks/17/events?lang=en&region=us
+/*
+{"$meta":{"parameters":{"week":["17"],"season":["2021"],"seasontypes":["2"]}},"count":16,"pageIndex":1,"pageSize":25,"pageCount":1,"items":[{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326569?lang=en&region=us"},{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326570?lang=en&region=us"},{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326571?lang=en&region=us"},{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326577?lang=en&region=us"},{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326573?lang=en&region=us"},{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326574?lang=en&region=us"},{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326576?lang=en&region=us"},{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326578?lang=en&region=us"},{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326581?lang=en&region=us"},{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326579?lang=en&region=us"},{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326580?lang=en&region=us"},{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326572?lang=en&region=us"},{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326575?lang=en&region=us"},{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326582?lang=en&region=us"},{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326583?lang=en&region=us"},{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326584?lang=en&region=us"}]}
+*/
+func GetESPNGameByWeek(week int) (ESPNNFLGamesByWeek, error) {
+	URL := fmt.Printf("http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2021/types/2/weeks/%d/events?lang=en&region=us", week)
+	resp, err := http.Get(URL)
+	if err != nil {
+		return ESPNNFLGamesByWeek{}, fmt.Errorf("nflStats#GetESPNGameByWeek: Get %s, error: %s", URL, err)
+	}
+
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
 }
