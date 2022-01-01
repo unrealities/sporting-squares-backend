@@ -218,13 +218,13 @@ func GetESPNGame(gameID int) (EspnNFLGame, error) {
 	return espnNFLGameResp, nil
 }
 
-// GetESPNGameByWeek fetches games for a given week and type
-// type 1 = preseason
-// type 2 = regular season
-// type 3 = playoffs
-// week is relative to the type. i.e. {type: 1, week: 1} = The Hall of Fame Game
-func GetESPNGameByWeek(type, week int) (ESPNNFLGamesByWeek, error) {
-	URL := fmt.Sprintf("http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2021/types/%d/weeks/%d/events?lang=en&region=us", type, week)
+// GetESPNGameByWeek fetches games for a given week and seasonType
+// seasonType 1 = preseason
+// seasonType 2 = regular season
+// seasonType 3 = playoffs
+// week is relative to the seasonType. i.e. {seasonType: 1, week: 1} = The Hall of Fame Game
+func GetESPNGameByWeek(seasonType, week int) (ESPNNFLGamesByWeek, error) {
+	URL := fmt.Sprintf("http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2021/types/%d/weeks/%d/events?lang=en&region=us", seasonType, week)
 	resp, err := http.Get(URL)
 	if err != nil {
 		return ESPNNFLGamesByWeek{}, fmt.Errorf("nflStats#GetESPNGameByWeek: Get %s, error: %s", URL, err)
@@ -242,3 +242,9 @@ func GetESPNGameByWeek(type, week int) (ESPNNFLGamesByWeek, error) {
 
 	return espnNFLGamesByWeekResp, nil
 }
+
+// TODO: Function to parse gameIDs out of ESPNNFLGamesByWeek
+// Loop through ESPNNFLGamesByWeek.Items
+// For each Ref take out the ID following / and preceeding ?
+// http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326584?lang=en&region=us
+// 
