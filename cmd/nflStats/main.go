@@ -247,4 +247,4 @@ func GetESPNGameByWeek(seasonType, week int) (ESPNNFLGamesByWeek, error) {
 // Loop through ESPNNFLGamesByWeek.Items
 // For each Ref take out the ID following / and preceeding ?
 // http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326584?lang=en&region=us
-// 
+// regex to get the game id: [^events\/](?:[0-9].*[0-9])
