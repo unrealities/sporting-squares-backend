@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"regexp"
 	"strconv"
 )
 
@@ -247,4 +248,13 @@ func GetESPNGameByWeek(seasonType, week int) (ESPNNFLGamesByWeek, error) {
 // Loop through ESPNNFLGamesByWeek.Items
 // For each Ref take out the ID following / and preceeding ?
 // http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326584?lang=en&region=us
-// regex to get the game id: [^events\/](?:[0-9].*[0-9])
+// regex to get the game id: 
+func extractGameIDs(games ESPNNFLGamesByWeek) ([]int) {
+	gameIDs := []int{}
+	for _, link := range games.Items {
+		gameID, _ := regexp.MatchString("[^events\/](?:[0-9].*[0-9])", link)
+		gameIDs = append(gameIDs, gameID)
+	}
+	return gameIDs
+}
+
