@@ -17,6 +17,14 @@ func GetGames() ([]Game, error) {
 		return games, fmt.Errorf("nflStats@GetScores: GetESPNScores, error: %s", err)
 	}
 
+	gbwResp, err := GetESPNGameByWeek(2, 17)
+	if err != nil {
+		return games, fmt.Errorf("nflStats@GetESPNGameByWeek: GetESPNGameByWeek, error: %s", err)
+	}
+
+	gameIDs := extractGameIDs(gbwResp)
+	fmt.Println("GameIDs: %v", gameIDs)
+
 	for _, e := range resp.Events {
 		g := Game{}
 		// Tuesday after week the scores are still previous week
