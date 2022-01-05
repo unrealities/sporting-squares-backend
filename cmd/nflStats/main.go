@@ -25,7 +25,7 @@ func GetGames() ([]Game, error) {
 	gameIDs := extractGameIDs(gbwResp)
 	fmt.Println("GameIDs: %v", gameIDs)
 
-	for _, e := range resp.Events {
+	for i, e := range resp.Events {
 		g := Game{}
 		// Tuesday after week the scores are still previous week
 		// Wednesday new games are ready
@@ -34,7 +34,7 @@ func GetGames() ([]Game, error) {
 			g.ID = -1
 			continue
 		}
-		score, err := GetESPNGame(id)
+		score, err := GetESPNGame(gameIDs[i])
 		if err != nil {
 			g.Quarter = -1
 			continue
