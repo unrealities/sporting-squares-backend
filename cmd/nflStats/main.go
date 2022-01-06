@@ -12,28 +12,17 @@ import (
 // TODO: persist to firebase cache storage
 func GetGames() ([]Game, error) {
 	games := []Game{}
-	resp, err := GetESPNScores()
-	if err != nil {
-		return games, fmt.Errorf("nflStats@GetScores: GetESPNScores, error: %s", err)
-	}
 
-	gbwResp, err := GetESPNGameByWeek(2, 17)
+	resp, err := GetESPNGameByWeek(2, 17)
 	if err != nil {
 		return games, fmt.Errorf("nflStats@GetESPNGameByWeek: GetESPNGameByWeek, error: %s", err)
 	}
 
-	gameIDs := extractGameIDs(gbwResp)
-	fmt.Println("GameIDs: %v", gameIDs)
+	gameIDs := extractGameIDs(resp)
 
-	for i, e := range resp.Events {
+	for i, gameID := range gameIDs {
 		g := Game{}
-		// Tuesday after week the scores are still previous week
-		// Wednesday new games are ready
-		id, err := strconv.Atoi(e.ID)
-		if err != nil {
-			g.ID = -1
-			continue
-		}
+
 		score, err := GetESPNGame(gameIDs[i])
 		if err != nil {
 			g.Quarter = -1
@@ -169,10 +158,13 @@ func GetGames() ([]Game, error) {
 				}
 			}
 		}
-		g.ID = id                      // May be able to use ID to fetch individual box scores
+
+		g.ID = gameID
+		/*  TODO: Get this from individual game
 		g.Quarter = e.Status.Period    // 0 = Game has not started. 4 = 4th or Game Over. 5 = Overtime or Game Over
 		g.Time = e.Status.DisplayClock // 0 = Game has not started. 4 = 4th or Game Over. 5 = Overtime or Game Over
 		g.GameOver = e.Status.Type.Completed
+		*/
 		for _, c := range e.Competitions {
 			if len(c.Odds) > 0 {
 				g.Odds.Details = c.Odds[0].Details     // ex. ARI -2.5 (need to separate out team and spread)
@@ -183,27 +175,6 @@ func GetGames() ([]Game, error) {
 	}
 
 	return games, nil
-}
-
-// GetESPNScores fetches current NFL game scores
-func GetESPNScores() (EspnNFLScores, error) {
-	URL := "http://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard"
-	resp, err := http.Get(URL)
-	if err != nil {
-		return EspnNFLScores{}, fmt.Errorf("nflStats#GetESPNScores: Get %s, error: %s", URL, err)
-	}
-
-	defer resp.Body.Close()
-
-	body, err := io.ReadAll(resp.Body)
-
-	espnNFLScoresResp := EspnNFLScores{}
-	json.Unmarshal([]byte(body), &espnNFLScoresResp)
-	if err != nil {
-		return EspnNFLScores{}, fmt.Errorf("nflStats#GetESPNScores: reading Get response body error: %s", err)
-	}
-
-	return espnNFLScoresResp, nil
 }
 
 // GetESPNGame fetches an individual NFL game given an ESPN gameID
@@ -252,11 +223,7 @@ func GetESPNGameByWeek(seasonType, week int) (ESPNNFLGamesByWeek, error) {
 	return espnNFLGamesByWeekResp, nil
 }
 
-// TODO: Function to parse gameIDs out of ESPNNFLGamesByWeek
-// Loop through ESPNNFLGamesByWeek.Items
-// For each Ref take out the ID following / and preceeding ?
-// http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401326584?lang=en&region=us
-// regex to get the game id: 
+// extractGameIDs parses gameIDs out of ESPNNFLGamesByWeek
 func extractGameIDs(games ESPNNFLGamesByWeek) ([]int) {
 	gameIDs := []int{}
 	for _, link := range games.Items {
@@ -265,4 +232,3 @@ func extractGameIDs(games ESPNNFLGamesByWeek) ([]int) {
 	}
 	return gameIDs
 }
-
