@@ -13,7 +13,9 @@ import (
 func GetGames() ([]Game, error) {
 	games := []Game{}
 
-	resp, err := GetESPNGameByWeek(2, 17)
+	week := 18
+	seasonType := 2
+	resp, err := GetESPNGameByWeek(seasonType, week)
 	if err != nil {
 		return games, fmt.Errorf("nflStats@GetESPNGameByWeek: GetESPNGameByWeek, error: %s", err)
 	}
@@ -160,6 +162,9 @@ func GetGames() ([]Game, error) {
 		}
 
 		g.ID = gameID
+		g.SeasonType = score.Header.Season.Type
+		g.Year = score.Header.Season.Year
+		g.Week = score.Header.Week
 		/*  TODO: Get this from individual game
 		g.Quarter = e.Status.Period    // 0 = Game has not started. 4 = 4th or Game Over. 5 = Overtime or Game Over
 		g.Time = e.Status.DisplayClock // 0 = Game has not started. 4 = 4th or Game Over. 5 = Overtime or Game Over
