@@ -38,7 +38,7 @@ func GetGames() ([]Game, error) {
 					if err != nil {
 						score = -1
 					}
-					// To get last digit NUM % 10
+
 					if t.HomeAway == "home" {
 						g.HomeTeam = t.Team.Abbreviation
 						g.HomeScore = score
@@ -165,11 +165,9 @@ func GetGames() ([]Game, error) {
 		g.SeasonType = score.Header.Season.Type
 		g.Year = score.Header.Season.Year
 		g.Week = score.Header.Week
-		/*  TODO: Get this from individual game
-		g.Quarter = e.Status.Period    // 0 = Game has not started. 4 = 4th or Game Over. 5 = Overtime or Game Over
-		g.Time = e.Status.DisplayClock // 0 = Game has not started. 4 = 4th or Game Over. 5 = Overtime or Game Over
-		g.GameOver = e.Status.Type.Completed
-		*/
+		g.Quarter = score.Drives.Previous[0].End.Period.Number
+		g.Time = score.Drives.Previous[0].TimeElapsed.DisplayValue
+		g.GameOVer = score.Header.Competitions[0].Status.Type.Completed
 		for _, c := range e.Competitions {
 			if len(c.Odds) > 0 {
 				g.Odds.Details = c.Odds[0].Details     // ex. ARI -2.5 (need to separate out team and spread)
