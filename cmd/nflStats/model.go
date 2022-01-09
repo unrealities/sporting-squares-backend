@@ -1004,7 +1004,6 @@ type Game struct {
 	HomeScore int
 	HomeTeam  string
 	ID        int
-	Linescore string
 	Odds      struct {
 		Details   string
 		OverUnder float64
