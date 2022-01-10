@@ -32,7 +32,6 @@ func GetGames() ([]Game, error) {
 		}
 
 		for _, c := range score.Header.Competitions {
-			if e.ID == c.ID {
 				for _, t := range c.Competitors {
 					score, err := strconv.Atoi(t.Score)
 					if err != nil {
@@ -158,7 +157,6 @@ func GetGames() ([]Game, error) {
 						}
 					}
 				}
-			}
 		}
 
 		g.ID = gameID
@@ -167,14 +165,15 @@ func GetGames() ([]Game, error) {
 		g.Week = score.Header.Week
 		g.Quarter = score.Drives.Previous[0].End.Period.Number
 		g.Time = score.Drives.Previous[0].TimeElapsed.DisplayValue
-		g.GameOVer = score.Header.Competitions[0].Status.Type.Completed
-		for _, c := range e.Competitions {
-			if len(c.Odds) > 0 {
-				g.Odds.Details = c.Odds[0].Details     // ex. ARI -2.5 (need to separate out team and spread)
-				g.Odds.OverUnder = c.Odds[0].OverUnder // ex. 51.5
-			}
-			games = append(games, g)
-		}
+		g.GameOver = score.Header.Competitions[0].Status.Type.Completed
+		// TODO: Update Odds source
+		// for _, c := range e.Competitions {
+		// 	if len(c.Odds) > 0 {
+		// 		g.Odds.Details = c.Odds[0].Details     // ex. ARI -2.5 (need to separate out team and spread)
+		// 		g.Odds.OverUnder = c.Odds[0].OverUnder // ex. 51.5
+		// 	}
+		// 	games = append(games, g)
+		// }
 	}
 
 	return games, nil
@@ -230,7 +229,7 @@ func GetESPNGameByWeek(seasonType, week int) (ESPNNFLGamesByWeek, error) {
 func extractGameIDs(games ESPNNFLGamesByWeek) ([]int) {
 	gameIDs := []int{}
 	for _, link := range games.Items {
-		gameID, _ := regexp.MatchString("[^events\/](?:[0-9].*[0-9])", link)
+		gameID, _ := regexp.MatchString("[^events\/](?:[0-9].*[0-9])", link.Ref)
 		gameIDs = append(gameIDs, gameID)
 	}
 	return gameIDs
