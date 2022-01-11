@@ -43,10 +43,10 @@ func GetGameDataByDay(w http.ResponseWriter, r *http.Request) {
 
 	// Load
 	// TODO: Need a key for storage
-	_, err = s.FirestoreClient.Collection(s.DBCollection).Doc(date.Format(s.DateFmt)).Set(ctx, games) // Execution Time: ~ 3500ms
-	if err != nil {
-		s.HandleFatalError("error persisting data to Firebase", err)
-	}
+	// _, err = s.FirestoreClient.Collection(s.DBCollection).Doc(date.Format(s.DateFmt)).Set(ctx, games) // Execution Time: ~ 3500ms
+	// if err != nil {
+	// 	s.HandleFatalError("error persisting data to Firebase", err)
+	// }
 
 	// Send Response
 	w.Header().Set("Access-Control-Allow-Origin", "*")

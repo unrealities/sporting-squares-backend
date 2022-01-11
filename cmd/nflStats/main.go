@@ -228,8 +228,16 @@ func GetESPNGameByWeek(seasonType, week int) (ESPNNFLGamesByWeek, error) {
 // extractGameIDs parses gameIDs out of ESPNNFLGamesByWeek
 func extractGameIDs(games ESPNNFLGamesByWeek) ([]int) {
 	gameIDs := []int{}
+	r, err := regexp.Compile("[^events/](?:[0-9].*[0-9])")
+	if err != nil {
+		return gameIDs
+	}
 	for _, link := range games.Items {
-		gameID, _ := regexp.MatchString("[^events\/](?:[0-9].*[0-9])", link.Ref)
+		strGameID := r.FindString(link.Ref)
+		gameID, err := strconv.Atoi(strGameID)
+		if err != nil {
+			gameID = -1
+		}
 		gameIDs = append(gameIDs, gameID)
 	}
 	return gameIDs
