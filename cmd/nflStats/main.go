@@ -13,8 +13,8 @@ import (
 func GetGames() ([]Game, error) {
 	games := []Game{}
 
-	week := 18
-	seasonType := 2
+	week := 19
+	seasonType := 3
 	resp, err := GetESPNGameByWeek(seasonType, week)
 	if err != nil {
 		return games, fmt.Errorf("nflStats@GetESPNGameByWeek: GetESPNGameByWeek, error: %s", err)
@@ -32,131 +32,131 @@ func GetGames() ([]Game, error) {
 		}
 
 		for _, c := range score.Header.Competitions {
-				for _, t := range c.Competitors {
-					score, err := strconv.Atoi(t.Score)
-					if err != nil {
-						score = -1
+			for _, t := range c.Competitors {
+				score, err := strconv.Atoi(t.Score)
+				if err != nil {
+					score = -1
+				}
+
+				if t.HomeAway == "home" {
+					g.HomeTeam = t.Team.Abbreviation
+					g.HomeScore = score
+
+					if len(t.Linescores) == 0 {
+						g.Digits.Home1 = -1
+						g.Digits.Home2 = -1
+						g.Digits.Home3 = -1
+						g.Digits.Home4 = -1
+						continue
 					}
-
-					if t.HomeAway == "home" {
-						g.HomeTeam = t.Team.Abbreviation
-						g.HomeScore = score
-
-						if len(t.Linescores) == 0 {
-							g.Digits.Home1 = -1
-							g.Digits.Home2 = -1
-							g.Digits.Home3 = -1
-							g.Digits.Home4 = -1
-							continue
-						}
-						// TODO: This is verbose and duplicated
-						firstQ, err := strconv.Atoi(t.Linescores[0].DisplayValue)
-						if err != nil {
-							g.Digits.Home1 = -1
-						} else {
-							g.Digits.Home1 = firstQ % 10
-						}
-						if len(t.Linescores) == 1 {
-							g.Digits.Home2 = -1
-							g.Digits.Home3 = -1
-							g.Digits.Home4 = -1
-							continue
-						}
-						secondQ, err := strconv.Atoi(t.Linescores[1].DisplayValue)
-						if err != nil {
-							g.Digits.Home2 = -1
-						} else {
-							g.Digits.Home2 = (firstQ + secondQ) % 10
-						}
-						if len(t.Linescores) == 2 {
-							g.Digits.Home3 = -1
-							g.Digits.Home4 = -1
-							continue
-						}
-						thirdQ, err := strconv.Atoi(t.Linescores[2].DisplayValue)
-						if err != nil {
-							g.Digits.Home3 = -1
-						} else {
-							g.Digits.Home3 = (firstQ + secondQ + thirdQ) % 10
-						}
-						if len(t.Linescores) == 3 {
-							g.Digits.Home4 = -1
-							continue
-						}
-						fourthQ, err := strconv.Atoi(t.Linescores[3].DisplayValue)
-						if err != nil {
-							g.Digits.Home4 = -1
-						} else {
-							g.Digits.Home4 = (firstQ + secondQ + thirdQ + fourthQ) % 10
-							if len(t.Linescores) > 4 {
-								overtime, err := strconv.Atoi(t.Linescores[4].DisplayValue)
-								if err != nil {
-									g.Digits.Home4 = -1
-								} else {
-									g.Digits.Home4 = (firstQ + secondQ + thirdQ + fourthQ + overtime) % 10
-								}
+					// TODO: This is verbose and duplicated
+					firstQ, err := strconv.Atoi(t.Linescores[0].DisplayValue)
+					if err != nil {
+						g.Digits.Home1 = -1
+					} else {
+						g.Digits.Home1 = firstQ % 10
+					}
+					if len(t.Linescores) == 1 {
+						g.Digits.Home2 = -1
+						g.Digits.Home3 = -1
+						g.Digits.Home4 = -1
+						continue
+					}
+					secondQ, err := strconv.Atoi(t.Linescores[1].DisplayValue)
+					if err != nil {
+						g.Digits.Home2 = -1
+					} else {
+						g.Digits.Home2 = (firstQ + secondQ) % 10
+					}
+					if len(t.Linescores) == 2 {
+						g.Digits.Home3 = -1
+						g.Digits.Home4 = -1
+						continue
+					}
+					thirdQ, err := strconv.Atoi(t.Linescores[2].DisplayValue)
+					if err != nil {
+						g.Digits.Home3 = -1
+					} else {
+						g.Digits.Home3 = (firstQ + secondQ + thirdQ) % 10
+					}
+					if len(t.Linescores) == 3 {
+						g.Digits.Home4 = -1
+						continue
+					}
+					fourthQ, err := strconv.Atoi(t.Linescores[3].DisplayValue)
+					if err != nil {
+						g.Digits.Home4 = -1
+					} else {
+						g.Digits.Home4 = (firstQ + secondQ + thirdQ + fourthQ) % 10
+						if len(t.Linescores) > 4 {
+							overtime, err := strconv.Atoi(t.Linescores[4].DisplayValue)
+							if err != nil {
+								g.Digits.Home4 = -1
+							} else {
+								g.Digits.Home4 = (firstQ + secondQ + thirdQ + fourthQ + overtime) % 10
 							}
 						}
-					} else {
-						g.AwayTeam = t.Team.Abbreviation
-						g.AwayScore = score
+					}
+				} else {
+					g.AwayTeam = t.Team.Abbreviation
+					g.AwayScore = score
 
-						if len(t.Linescores) == 0 {
-							g.Digits.Away1 = -1
-							g.Digits.Away2 = -1
-							g.Digits.Away3 = -1
-							g.Digits.Away4 = -1
-							continue
-						}
-						firstQ, err := strconv.Atoi(t.Linescores[0].DisplayValue)
-						if err != nil {
-							g.Digits.Away1 = -1
-						} else {
-							g.Digits.Away1 = firstQ % 10
-						}
-						if len(t.Linescores) == 1 {
-							g.Digits.Away2 = -1
-							g.Digits.Away3 = -1
-							g.Digits.Away4 = -1
-							continue
-						}
-						secondQ, err := strconv.Atoi(t.Linescores[1].DisplayValue)
-						if err != nil {
-							g.Digits.Away2 = -1
-						} else {
-							g.Digits.Away2 = (firstQ + secondQ) % 10
-						}
-						if len(t.Linescores) == 2 {
-							g.Digits.Away3 = -1
-							g.Digits.Away4 = -1
-							continue
-						}
-						thirdQ, err := strconv.Atoi(t.Linescores[2].DisplayValue)
-						if err != nil {
-							g.Digits.Away3 = -1
-						} else {
-							g.Digits.Away3 = (firstQ + secondQ + thirdQ) % 10
-						}
-						if len(t.Linescores) == 3 {
-							g.Digits.Away4 = -1
-							continue
-						}
-						fourthQ, err := strconv.Atoi(t.Linescores[3].DisplayValue)
-						if err != nil {
-							g.Digits.Away4 = -1
-						} else {
-							g.Digits.Away4 = (firstQ + secondQ + thirdQ + fourthQ) % 10
-							if len(t.Linescores) > 4 {
-								overtime, err := strconv.Atoi(t.Linescores[4].DisplayValue)
-								if err != nil {
-									g.Digits.Away4 = -1
-								} else {
-									g.Digits.Away4 = (firstQ + secondQ + thirdQ + fourthQ + overtime) % 10
-								}
+					if len(t.Linescores) == 0 {
+						g.Digits.Away1 = -1
+						g.Digits.Away2 = -1
+						g.Digits.Away3 = -1
+						g.Digits.Away4 = -1
+						continue
+					}
+					firstQ, err := strconv.Atoi(t.Linescores[0].DisplayValue)
+					if err != nil {
+						g.Digits.Away1 = -1
+					} else {
+						g.Digits.Away1 = firstQ % 10
+					}
+					if len(t.Linescores) == 1 {
+						g.Digits.Away2 = -1
+						g.Digits.Away3 = -1
+						g.Digits.Away4 = -1
+						continue
+					}
+					secondQ, err := strconv.Atoi(t.Linescores[1].DisplayValue)
+					if err != nil {
+						g.Digits.Away2 = -1
+					} else {
+						g.Digits.Away2 = (firstQ + secondQ) % 10
+					}
+					if len(t.Linescores) == 2 {
+						g.Digits.Away3 = -1
+						g.Digits.Away4 = -1
+						continue
+					}
+					thirdQ, err := strconv.Atoi(t.Linescores[2].DisplayValue)
+					if err != nil {
+						g.Digits.Away3 = -1
+					} else {
+						g.Digits.Away3 = (firstQ + secondQ + thirdQ) % 10
+					}
+					if len(t.Linescores) == 3 {
+						g.Digits.Away4 = -1
+						continue
+					}
+					fourthQ, err := strconv.Atoi(t.Linescores[3].DisplayValue)
+					if err != nil {
+						g.Digits.Away4 = -1
+					} else {
+						g.Digits.Away4 = (firstQ + secondQ + thirdQ + fourthQ) % 10
+						if len(t.Linescores) > 4 {
+							overtime, err := strconv.Atoi(t.Linescores[4].DisplayValue)
+							if err != nil {
+								g.Digits.Away4 = -1
+							} else {
+								g.Digits.Away4 = (firstQ + secondQ + thirdQ + fourthQ + overtime) % 10
 							}
 						}
 					}
 				}
+			}
 		}
 
 		g.ID = gameID
@@ -174,6 +174,7 @@ func GetGames() ([]Game, error) {
 		// 	}
 		// 	games = append(games, g)
 		// }
+		games = append(games, g)
 	}
 
 	return games, nil
@@ -226,7 +227,7 @@ func GetESPNGameByWeek(seasonType, week int) (ESPNNFLGamesByWeek, error) {
 }
 
 // extractGameIDs parses gameIDs out of ESPNNFLGamesByWeek
-func extractGameIDs(games ESPNNFLGamesByWeek) ([]int) {
+func extractGameIDs(games ESPNNFLGamesByWeek) []int {
 	gameIDs := []int{}
 	r, err := regexp.Compile("[^events/](?:[0-9].*[0-9])")
 	if err != nil {
