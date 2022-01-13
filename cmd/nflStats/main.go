@@ -13,7 +13,7 @@ import (
 func GetGames() ([]Game, error) {
 	games := []Game{}
 
-	week := 19
+	week := 1
 	seasonType := 3
 	resp, err := GetESPNGameByWeek(seasonType, week)
 	if err != nil {
@@ -163,9 +163,12 @@ func GetGames() ([]Game, error) {
 		g.SeasonType = score.Header.Season.Type
 		g.Year = score.Header.Season.Year
 		g.Week = score.Header.Week
-		g.Quarter = score.Drives.Previous[0].End.Period.Number
-		g.Time = score.Drives.Previous[0].TimeElapsed.DisplayValue
-		g.GameOver = score.Header.Competitions[0].Status.Type.Completed
+		// TODO: Quarter breaks if the game hasn't started
+		// g.Quarter = score.Drives.Previous[0].End.Period.Number
+		// TODO: Time breaks if the game hasn't started
+		// g.Time = score.Drives.Previous[0].TimeElapsed.DisplayValue
+		// TODO: GameOver breaks if the game hasn't started
+		// g.GameOver = score.Header.Competitions[0].Status.Type.Completed
 		// TODO: Update Odds source
 		// for _, c := range e.Competitions {
 		// 	if len(c.Odds) > 0 {
