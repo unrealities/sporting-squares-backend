@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/unrealities/sporting-squares-backend/cmd/nflStats"
@@ -41,12 +42,12 @@ func GetGameDataByDay(w http.ResponseWriter, r *http.Request) {
 	// Transform
 	// TODO: Decouple Extra/Transform
 
-	// Load
-	// TODO: Need a key for storage
-	// _, err = s.FirestoreClient.Collection(s.DBCollection).Doc(date.Format(s.DateFmt)).Set(ctx, games) // Execution Time: ~ 3500ms
-	// if err != nil {
-	// 	s.HandleFatalError("error persisting data to Firebase", err)
-	// }
+	// Loade
+	dataKey := fmt.Sprintf("y%dw%dt%d", games[0].Year, games[0].Week, games[0].SeasonType)
+	_, err = s.FirestoreClient.Collection(s.DBCollection).Doc(dataKey).Set(ctx, games) // Execution Time: ~ 3500ms
+	if err != nil {
+		s.HandleFatalError("error persisting data to Firebase", err)
+	}
 
 	// Send Response
 	w.Header().Set("Access-Control-Allow-Origin", "*")
