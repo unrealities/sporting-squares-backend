@@ -8,10 +8,10 @@ import (
 	"github.com/unrealities/sporting-squares-backend/cmd/nflStats"
 )
 
-// GetGameData returns useful (to Sporting Squares) game information
+// GetGameDataByWeek returns useful (to Sporting Squares) game information
 // ex. POST request:
 // https://us-central1-sporting-squares-backend.cloudfunctions.net/GetGameData
-func GetGameDataByDay(w http.ResponseWriter, r *http.Request) {
+func GetGameDataByWeek(w http.ResponseWriter, r *http.Request) {
 	// Set CORS headers for the preflight request
 	if r.Method == http.MethodOptions {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
