@@ -42,7 +42,7 @@ func GetGameDataByWeek(w http.ResponseWriter, r *http.Request) {
 	// Transform
 	// TODO: Decouple Extract & Transform
 
-	// Loade
+	// Load
 	dataKey := fmt.Sprintf("y%dw%dt%d", games[0].Year, games[0].Week, games[0].SeasonType)
 	_, err = s.FirestoreClient.Collection(s.DBCollection).Doc(dataKey).Set(ctx, games) // Execution Time: ~ 3500ms
 	if err != nil {
