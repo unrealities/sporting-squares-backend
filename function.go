@@ -40,7 +40,7 @@ func GetGameDataByWeek(w http.ResponseWriter, r *http.Request) {
 	s.DebugMsg("successfully fetched data")
 
 	// Transform
-	// TODO: Decouple Extra/Transform
+	// TODO: Decouple Extract & Transform
 
 	// Loade
 	dataKey := fmt.Sprintf("y%dw%dt%d", games[0].Year, games[0].Week, games[0].SeasonType)
