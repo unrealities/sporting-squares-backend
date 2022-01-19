@@ -10,7 +10,7 @@ import (
 
 // GetGameDataByWeek returns useful (to Sporting Squares) game information
 // ex. POST request:
-// https://us-central1-sporting-squares-backend.cloudfunctions.net/GetGameData
+// https://us-central1-sporting-squares-backend.cloudfunctions.net/GetGameDataByWeek
 func GetGameDataByWeek(w http.ResponseWriter, r *http.Request) {
 	// Set CORS headers for the preflight request
 	if r.Method == http.MethodOptions {
