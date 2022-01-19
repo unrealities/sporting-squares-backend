@@ -14,7 +14,7 @@
             "--runtime",
             "go113",
             "--service-account",
-            "firebase-adminsdk-t8pqz@$PROJECT_ID.iam.gserviceaccount.com",
+            "firebase-adminsdk-tikf5@$PROJECT_ID.iam.gserviceaccount.com",
             "--set-env-vars",
             "DB_COLLECTION=${_DB_COLLECTION},FN_NAME=${_FUNCTION_NAME},PROJECT_ID=$PROJECT_ID,VERSION=$COMMIT_SHA",
             "--source",
