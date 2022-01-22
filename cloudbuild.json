@@ -12,7 +12,7 @@
             "--memory",
             "128MB",
             "--runtime",
-            "go113",
+            "go116",
             "--service-account",
             "firebase-adminsdk-tikf5@$PROJECT_ID.iam.gserviceaccount.com",
             "--set-env-vars",
