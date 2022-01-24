@@ -16,14 +16,12 @@ require (
 	cloud.google.com/go/iam v0.1.1 // indirect
 	cloud.google.com/go/monitoring v1.2.0 // indirect
 	cloud.google.com/go/storage v1.18.2 // indirect
-	github.com/GoogleCloudPlatform/functions-framework-go v1.5.2 // indirect
+	github.com/GoogleCloudPlatform/functions-framework-go v1.5.2
 	github.com/aws/aws-sdk-go v1.42.39 // indirect
-	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/google/go-cmp v0.5.7 // indirect
 	golang.org/x/net v0.0.0-20220121210141-e204ce36a2ba // indirect
 	golang.org/x/sys v0.0.0-20220114195835-da31bd327af9 // indirect
 	google.golang.org/genproto v0.0.0-20220118154757-00ab72f36ad5 // indirect
 	google.golang.org/grpc v1.43.0 // indirect
-	gopkg.in/yaml.v2 v2.3.0 // indirect
 )
