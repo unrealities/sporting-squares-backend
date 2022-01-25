@@ -17,8 +17,6 @@ cloud.google.com/go/errorreporting/apiv1beta1
 ## explicit
 cloud.google.com/go/firestore
 cloud.google.com/go/firestore/apiv1
-# cloud.google.com/go/functions v1.0.0
-cloud.google.com/go/functions/metadata
 # cloud.google.com/go/iam v0.1.1
 ## explicit
 cloud.google.com/go/iam
@@ -53,9 +51,7 @@ firebase.google.com/go/messaging
 firebase.google.com/go/storage
 # github.com/GoogleCloudPlatform/functions-framework-go v1.5.2
 ## explicit
-github.com/GoogleCloudPlatform/functions-framework-go/funcframework
-github.com/GoogleCloudPlatform/functions-framework-go/internal/events/pubsub
-github.com/GoogleCloudPlatform/functions-framework-go/internal/fftypes
+github.com/GoogleCloudPlatform/functions-framework-go/functions
 github.com/GoogleCloudPlatform/functions-framework-go/internal/registry
 # github.com/aws/aws-sdk-go v1.42.39
 ## explicit
@@ -118,8 +114,6 @@ github.com/cloudevents/sdk-go/v2/event/datacodec/xml
 github.com/cloudevents/sdk-go/v2/protocol
 github.com/cloudevents/sdk-go/v2/protocol/http
 github.com/cloudevents/sdk-go/v2/types
-# github.com/davecgh/go-spew v1.1.1
-## explicit
 # github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da
 ## explicit
 github.com/golang/groupcache/lru
@@ -368,5 +362,3 @@ google.golang.org/protobuf/types/known/fieldmaskpb
 google.golang.org/protobuf/types/known/structpb
 google.golang.org/protobuf/types/known/timestamppb
 google.golang.org/protobuf/types/known/wrapperspb
-# gopkg.in/yaml.v2 v2.3.0
-## explicit
