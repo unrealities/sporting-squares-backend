@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/unrealities/sporting-squares-backend/cmd/nflStats"
+	"github.com/unrealities/sporting-squares-backend/nflStats"
 
 	"github.com/GoogleCloudPlatform/functions-framework-go/functions"
 )
