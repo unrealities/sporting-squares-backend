@@ -1,3 +1,3 @@
 module github.com/unrealities/sporting-squares-backend/nflStats
 
-go 1.17
+go 1.16

@@ -1,6 +1,6 @@
 module github.com/unrealities/sporting-squares-backend
 
-go 1.17
+go 1.16
 
 require (
 	cloud.google.com/go/errorreporting v0.1.0
