@@ -13,7 +13,7 @@ import (
 func GetGames() ([]Game, error) {
 	games := []Game{}
 
-	week := 1
+	week := 3
 	seasonType := 3
 	resp, err := GetESPNGameByWeek(seasonType, week)
 	if err != nil {
