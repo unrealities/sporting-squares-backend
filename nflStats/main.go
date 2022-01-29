@@ -10,14 +10,14 @@ import (
 )
 
 // TODO: persist to firebase cache storage
-func GetGames() ([]Game, error) {
+func GetGames() (Games, error) {
 	games := []Game{}
 
 	week := 3
 	seasonType := 3
 	resp, err := GetESPNGameByWeek(seasonType, week)
 	if err != nil {
-		return games, fmt.Errorf("nflStats@GetESPNGameByWeek: GetESPNGameByWeek, error: %s", err)
+		return Games{games}, fmt.Errorf("nflStats@GetESPNGameByWeek: GetESPNGameByWeek, error: %s", err)
 	}
 
 	gameIDs := extractGameIDs(resp)
@@ -173,7 +173,7 @@ func GetGames() ([]Game, error) {
 		games = append(games, g)
 	}
 
-	return games, nil
+	return Games{games}, nil
 }
 
 // GetESPNGame fetches an individual NFL game given an ESPN gameID

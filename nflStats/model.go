@@ -1014,3 +1014,7 @@ type Game struct {
 	Week       int
 	Year       int
 }
+
+type Games struct {
+	Games []Game
+}
