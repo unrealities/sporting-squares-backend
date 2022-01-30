@@ -52,8 +52,6 @@ func GetGameDataByWeek(w http.ResponseWriter, r *http.Request) {
 	// Load
 	dataKey := fmt.Sprintf("y%dw%dt%d", games.Games[0].Year, games.Games[0].Week, games.Games[0].SeasonType)
 	_, err = s.FirestoreClient.Collection(s.DBCollection).Doc(dataKey).Set(ctx, games) // Execution Time: ~ 3500ms
-	// TODO: receiving error:
-	// error persisting data to Firebase: firestore: cannot convert value of type []nflStats.Game into a map
 	if err != nil {
 		s.HandleFatalError("error persisting data to Firebase", err)
 	}
