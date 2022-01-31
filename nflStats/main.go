@@ -13,12 +13,23 @@ import (
 func GetGames() ([]EspnNFLGame, error) {
 	games := []EspnNFLGame{}
 
-	week := 3
+	// TODO: Accept a given date and convert to week & season type
+	week := 4
 	seasonType := 3
-	// TODO: what am I passing to the transformer?
+
 	resp, err := GetESPNGameByWeek(seasonType, week)
 	if err != nil {
-		return games, fmt.Errorf("nflStats@GetESPNGameByWeek: GetESPNGameByWeek, error: %s", err)
+		return games, fmt.Errorf("nflStats@GetGames: GetESPNGameByWeek, error: %s", err)
+	}
+
+	gameIDs := extractGameIDs(resp)
+	for _, gameID := range gameIDs {
+		game, err := GetESPNGame(gameID)
+		if err != nil {
+			fmt.Println(fmt.Errorf("nflStats@GetGames: GetESPNGame: gameID: %d not found, error: %s", gameID, err))
+			continue
+		}
+		games = append(games, game)
 	}
 
 	return games, nil
