@@ -1,18 +1,22 @@
 package transformers
 
 import (
+	"strconv"
+
 	"github.com/unrealities/sporting-squares-backend/nflStats"
 )
 
 func UltraMagnus(games []nflStats.EspnNFLGame) (Energon, error) {
-	// TODO
-	/*
-		gameIDs := extractGameIDs(resp)
+	result := []Game{}
 
-	for i, gameID := range gameIDs {
+	for _, game := range games {
 		g := Game{}
+		gameID, err := strconv.Atoi(game.Header.ID)
+		if err != nil {
+			continue
+		}
 
-		score, err := GetESPNGame(gameIDs[i])
+		score, err := nflStats.GetESPNGame(gameID)
 		if err != nil {
 			g.Quarter = -1
 			continue
@@ -157,7 +161,11 @@ func UltraMagnus(games []nflStats.EspnNFLGame) (Energon, error) {
 		g.GameOver = score.Header.Competitions[0].Status.Type.Completed
 		g.Odds.Details = score.Pickcenter[0].Details
 		g.Odds.OverUnder = score.Pickcenter[0].OverUnder
-		games = append(games, g)
+		result = append(result, g)
 	}
-	*/
+
+	e := Energon{}
+	e.Games = result
+
+	return e, nil
 }

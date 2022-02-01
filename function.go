@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/unrealities/sporting-squares-backend/nflStats"
+	"github.com/unrealities/sporting-squares-backend/transformers"
 
 	"github.com/GoogleCloudPlatform/functions-framework-go/functions"
 )
@@ -48,9 +49,13 @@ func GetGameDataByWeek(w http.ResponseWriter, r *http.Request) {
 
 	// Transform
 	// TODO: Decouple Extract & Transform
+	data, err := transformers.UltraMagnus(games)
+	if err != nil {
+		s.HandleFatalError("error transforming games for loading", err)
+	}
 
 	// Load
-	dataKey := fmt.Sprintf("y%dw%dt%d", games.Games[0].Year, games.Games[0].Week, games.Games[0].SeasonType)
+	dataKey := fmt.Sprintf("y%dw%dt%d", data.Games[0].Year, data.Games[0].Week, data.Games[0].SeasonType)
 	_, err = s.FirestoreClient.Collection(s.DBCollection).Doc(dataKey).Set(ctx, games) // Execution Time: ~ 3500ms
 	if err != nil {
 		s.HandleFatalError("error persisting data to Firebase", err)

@@ -9,7 +9,6 @@ import (
 	"strconv"
 )
 
-// TODO: persist to firebase cache storage
 func GetGames() ([]EspnNFLGame, error) {
 	games := []EspnNFLGame{}
 
