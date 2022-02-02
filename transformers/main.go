@@ -158,9 +158,13 @@ func UltraMagnus(games []nflStats.EspnNFLGame) (Energon, error) {
 			g.Quarter = score.Drives.Previous[0].End.Period.Number
 			g.Time = score.Drives.Previous[0].TimeElapsed.DisplayValue
 		}
-		g.GameOver = score.Header.Competitions[0].Status.Type.Completed
-		g.Odds.Details = score.Pickcenter[0].Details
-		g.Odds.OverUnder = score.Pickcenter[0].OverUnder
+		if len(score.Header.Competitions) > 0 {
+			g.GameOver = score.Header.Competitions[0].Status.Type.Completed
+		}
+		if len(score.Pickcenter) > 0 {
+			g.Odds.Details = score.Pickcenter[0].Details
+			g.Odds.OverUnder = score.Pickcenter[0].OverUnder
+		}
 		result = append(result, g)
 	}
 
