@@ -1,6 +1,2 @@
-go.mod
-go.sum
-vendor/*
-
 .git
 .gitignore
