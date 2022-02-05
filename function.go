@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/GoogleCloudPlatform/functions-framework-go/functions"
+
 	"github.com/unrealities/sporting-squares-backend/nflStats"
 	"github.com/unrealities/sporting-squares-backend/transformers"
-
-	"github.com/GoogleCloudPlatform/functions-framework-go/functions"
 )
 
 func init() {
@@ -56,7 +56,7 @@ func GetGameDataByWeek(w http.ResponseWriter, r *http.Request) {
 
 	// Load
 	dataKey := fmt.Sprintf("y%dw%dt%d", data.Games[0].Year, data.Games[0].Week, data.Games[0].SeasonType)
-	_, err = s.FirestoreClient.Collection(s.DBCollection).Doc(dataKey).Set(ctx, games) // Execution Time: ~ 3500ms
+	_, err = s.FirestoreClient.Collection(s.DBCollection).Doc(dataKey).Set(ctx, data) // Execution Time: ~ 3500ms
 	if err != nil {
 		s.HandleFatalError("error persisting data to Firebase", err)
 	}
