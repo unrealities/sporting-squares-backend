@@ -56,7 +56,7 @@ func GetGameDataByWeek(w http.ResponseWriter, r *http.Request) {
 
 	// Load
 	dataKey := fmt.Sprintf("y%dw%dt%d", data.Games[0].Year, data.Games[0].Week, data.Games[0].SeasonType)
-	_, err = s.FirestoreClient.Collection(s.DBCollection).Doc(dataKey).Set(ctx, data) // Execution Time: ~ 3500ms
+	_, err = s.FirestoreClient.Collection(s.DBCollection).Doc(dataKey).Set(ctx, data)
 	if err != nil {
 		s.HandleFatalError("error persisting data to Firebase", err)
 	}
@@ -64,5 +64,5 @@ func GetGameDataByWeek(w http.ResponseWriter, r *http.Request) {
 	// Send Response
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(games)
+	json.NewEncoder(w).Encode(data)
 }
