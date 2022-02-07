@@ -19,6 +19,7 @@ func init() {
 // ex. POST request:
 // https://us-central1-sporting-squares-backend.cloudfunctions.net/GetGameDataByWeek
 // TODO: pass in week/date data to this request?
+// create a json lookup table that matches start dates with week and game type
 func GetGameDataByWeek(w http.ResponseWriter, r *http.Request) {
 	// Set CORS headers for the preflight request
 	if r.Method == http.MethodOptions {
@@ -31,7 +32,7 @@ func GetGameDataByWeek(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ctx := r.Context()
-	s, err := InitService(ctx) // Execution Time: ~300ms
+	s, err := InitService(ctx)
 	if err != nil {
 		s.HandleFatalError("error initializing service", err)
 	}
@@ -48,7 +49,6 @@ func GetGameDataByWeek(w http.ResponseWriter, r *http.Request) {
 	s.DebugMsg("successfully fetched data")
 
 	// Transform
-	// TODO: Decouple Extract & Transform
 	data, err := transformers.UltraMagnus(games)
 	if err != nil {
 		s.HandleFatalError("error transforming games for loading", err)
